@@ -52,7 +52,6 @@ url - 请求网关地址，默认为正式环境 https://gw-api.pinduoduo.com/ap
 
 ```javascript
 const cats = await pdd.goods.cats.get({
-    type: 'pdd.goods.cats.get',
     parent_cat_id: 0
 })
 ```
