@@ -1,0 +1,14 @@
+{
+  "name": "pinduoduo",
+  "version": "1.0.0",
+  "description": "Non-official Promise Node library for pinduoduo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dai Jie <daijie@php.net>",
+  "license": "MIT",
+  "dependencies": {
+    "urllib": "^2.29.1"
+  }
+}
