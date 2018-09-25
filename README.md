@@ -7,8 +7,8 @@ npm i pinduoduo --save
 
 ## 快速上手
 ```javascript
-const client_id = '8aa57095eacf449f94fa61e6c761a202';
-const client_secret = '';
+const client_id = '8aa57095eacf449f94fa61e6c761a202'; //这里设置你自己的 client_id
+const client_secret = ''; // 这里设置成自己的 client_secret
 const Pinduoduo = require('pinduoduo');
 const pdd = new Pinduoduo({
     client_id,
@@ -63,9 +63,10 @@ Error.name - 错误码
 Error.message - 错误描述
 ```javascript
 try {
-    console.log(await pdd.ddk.goods.recommend.get({
+    const goods = await pdd.ddk.goods.recommend.get({
         offset: 0
-    }));
+    });
+    console.log(goods);
 } catch (err) {
     console.log('#', err.name, err.message);
 }
