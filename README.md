@@ -3,7 +3,7 @@
 Non-official Promise Node library for pinduoduo.com
 
 ## 安装
-npm i pinduoduo --save
+`npm i pinduoduo --save`
 
 ## 快速上手
 ```javascript
