@@ -1,6 +1,6 @@
 {
   "name": "pinduoduo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Non-official Promise Node library for pinduoduo",
   "main": "index.js",
   "scripts": {

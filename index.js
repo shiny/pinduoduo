@@ -20,9 +20,19 @@ const time = function() {
     return Math.ceil((new Date()).getTime() / 1000);
 }
 
-module.exports = function(commonArgs, client_secret, options = {
-    url: 'https://gw-api.pinduoduo.com/api/router'
-}) {
+const defaultOptions = {
+    url: 'https://gw-api.pinduoduo.com/api/router',
+    getNestedResponse: true
+};
+
+module.exports = function(commonArgs, client_secret, options = {}) {
+    const hasOptions = Object.keys(options).length > 0;
+    if (typeof client_secret === 'string') {
+        options.client_secret = client_secret;
+    } else if(typeof client_secret === 'object' &&  !hasOptions) {
+        options = client_secret;
+    }
+    options = Object.assign(defaultOptions, options);
     const stack = [];
     const clearStack = () => {
         stack.splice(0, stack.length);
@@ -37,7 +47,7 @@ module.exports = function(commonArgs, client_secret, options = {
             type,
             timestamp: time()
         });
-        form.sign = sign(form, client_secret);
+        form.sign = sign(form, options.client_secret);
         return new Promise((resolve, reject) => {
             urllib.request(options.url + '?' + querystring.stringify(form), {
                 dataType: 'json',
@@ -49,9 +59,28 @@ module.exports = function(commonArgs, client_secret, options = {
                     const { error_code = -1, error_msg = '' } = result.data.error_response;
                     const err = new Error(error_msg);
                     err.name = error_code;
-                    reject(err);
+                    return reject(err);
+                }
+                if(options.getNestedResponse) {
+                    const keys = Object.keys(result.data);
+                    let response;
+                    if(keys.length === 1) {
+                        const theOnlyKey = keys[0];
+                        response = result.data[theOnlyKey];
+                        return resolve(response);
+                    } else if (keys.length > 1) {
+                        for(let key of keys) {
+                            if(key.endsWith('_response')) {
+                                response = result.data[key];
+                                return resolve(response);
+                            }
+                        }
+                    }
+                    const err = new Error('Can\'t get nested response.');
+                    err.name = -1;
+                    throw new Error(err);
                 } else {
-                    resolve(result.data);
+                    return resolve(result.data);
                 }
             }).catch(err => {
                 reject(err);
