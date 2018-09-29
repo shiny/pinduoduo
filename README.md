@@ -50,12 +50,18 @@ options = {
 #### 类库的使用选项
 - url - 请求网关地址，默认为正式环境 `https://gw-api.pinduoduo.com/api/router`。注意官方提供的 url 是 http 而非 https 的。如果希望以官方形式，或者希望传入沙箱 url 可修改此配置。
 - getNestedResponse - 是否自动解析嵌套的 response
-#### 返回数据的自动解析 getNestedResponse
+- getBuiltUrl - 是否直接返回构建好的 URL
+#### 返回数据的自动解析：getNestedResponse
 目的是使拼多多返回数据更简洁易读，仅仅解析第一级 JSON 数据。更深层次的内容不会解析。
 
 - 当响应的 JSON 格式仅只有一个 key 时，自动返回 key 内的值；
 - 当响应的 JSON 格式 key 以 `_response` 结尾时，自动返回此 key 内的值；
 - 其他情况会抛出 Error，提示 `Can't get nested response.`
+
+#### 直接返回构建好的 URL：getBuiltUrl
+如果希望在客户端直接调用，或者希望使用自己的 http request lib，可以通过此功能直接获取构建好的 url，然后自己通过 post 到此 url 即可调用。
+**开启此选项时，不要使用 await 调用。返回的不是 Promise 对象，而直接是字符串。**
+> 此外需要注意拼多多开放平台的 IP 白名单功能。
 
 ## API 调用
 使用 new 生成变量名为 pdd 的实例后，即可以官方文档中的风格调用，请求参数以 Object 对象传入函数的第一个参数。

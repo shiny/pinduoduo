@@ -22,7 +22,8 @@ const time = function() {
 
 const defaultOptions = {
     url: 'https://gw-api.pinduoduo.com/api/router',
-    getNestedResponse: true
+    getNestedResponse: true,
+    getBuiltUrl: false
 };
 
 module.exports = function(commonArgs, client_secret, options = {}) {
@@ -48,8 +49,12 @@ module.exports = function(commonArgs, client_secret, options = {}) {
             timestamp: time()
         });
         form.sign = sign(form, options.client_secret);
+        const url = options.url + '?' + querystring.stringify(form);
+        if(options.getBuiltUrl) {
+          return url;
+        }
         return new Promise((resolve, reject) => {
-            urllib.request(options.url + '?' + querystring.stringify(form), {
+            urllib.request(url, {
                 dataType: 'json',
                 gzip: true,
                 method: 'POST'
